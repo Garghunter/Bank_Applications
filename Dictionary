@@ -1,0 +1,119 @@
+import random
+cus={}
+def genAno():
+    a=random.randint(1,9)
+    b=random.randint(1,9)
+    c=random.randint(1,9)
+    d=random.randint(1,9)
+    num="sbi"+str(a)+str(b)+str(c)+str(d)
+    return num
+def openAcc():
+    ano=genAno()
+    print('Your Account Number is',ano)
+    cname=input('Enter Your Name')
+    atype=input('Enter Account Type')
+    if atype=='current':
+        money=3000
+    else:
+        money=2500
+    cus[ano]=[cname,atype,money]
+    print('Account Is Open')
+def defmon():
+    ano=input('Enter Account Number')
+    amt=int(input('Enter amount to be deposited'))
+    f=0
+    for x in cus:
+        if x==ano:
+            f=1
+            cus[x][2]=cus[x][2]+amt
+            print('Amount deposited')
+            break
+    if f==0:
+        print('Account no not found')
+def withmon():
+    ano=input('Enter Account Number')
+    amt=int(input('Enter amount to be withdrow'))
+    f=0
+    for x in cus:
+        if x==ano:
+            f=1
+            cus[x][2]=cus[x][2]-amt
+            print('Amount withdrow')
+            break
+    if f==0:
+        print('Account no not found')
+def display():
+    for x in cus:
+        print('Account Number Is',x)
+        print('Name is ',cus[x][0])
+        print('Account Type is',cus[x][1])
+        print('Current Balance is',cus[x][2])
+        print('='*50)
+def closeAcc():
+    cus.clear()
+    print('Account Is Closed')
+def getAcno(ano):
+    f=0
+    for x in cus:
+        if x==ano:
+            f=1
+            break
+    return f        
+def tranmon():
+    ano=input('Enter Account Number')
+    amt=int(input('Enter amount to be tranfer'))
+    ano1=input('Enter Account Number Which You Tranfer The Money')
+    f=0
+    f1=getAcno(ano)
+    f2=getAcno(ano1)
+    if f1==1 and f2==1:
+        for i in cus:
+            if i==ano:
+                cus[i][2]=cus[i][2]-amt
+                f=1
+                break
+        for j in cus:
+            if j==ano1:
+                cus[j][2]=cus[j][2]+amt
+                f=1
+                print('Money Transfered')
+                break
+    else:
+        print('Account is NOt found')
+def enquary():
+    ano=input('Enter Account number')
+    for x in cus:
+        if x==ano:
+             print('Account Number Is',x)
+             print('Name is ',cus[x][0])
+             print('Account Type is',cus[x][1])
+             print('Current Balance is',cus[x][2])
+        else:
+            print('Account Number Is Not Found')
+while True:
+    print('Main Menu')
+    print('1. Open Account')
+    print('2. Deposit Money')
+    print('3. Withdrow Money')
+    print('4. Enquiry Account')
+    print('5. Close Account')
+    print('6. Display All')
+    print('7. Transfer Money')
+    print('8. Exit')
+    A=int(input('Enter Your Choice'))
+    if A==1:
+        openAcc()
+    elif A==2:
+        defmon()
+    elif A==3:
+        withmon()
+    elif A==4:
+        enquary()
+    elif A==5:
+        closeAcc()
+    elif A==6:
+        display()
+    elif A==7:
+        tranmon()
+    else:
+        break
