@@ -1,0 +1,107 @@
+import pickle
+import os
+def addrec():
+    f1=open('student.dat','ab')
+    eno=int(input('Enter Roll Number'))
+    sname=input('Enter Student Name')
+    crs=input('Enter Course')
+    fee=int(input('Enter Fee'))
+    d1={'Eno':eno,'Name':sname,'Course':crs,'Fee':fee}
+    pickle.dump(d1,f1)
+    f1.close()
+def displayall():
+    f1=open('student.dat','rb')
+    try:
+        while True:
+            d1=pickle.load(f1)
+            print('Eno is',d1['Eno'])
+            print('Student Name is ',d1['Name'])
+            print('Course is',d1['Course'])
+            print('Fee is',d1['Fee'])
+            print('='*50)
+        f1.close()
+    except:
+        pass
+def Search():
+    f1=open('student.dat','rb')
+    eno=int(input('Enter Roll Number To Be search'))
+    f=0
+    try:
+        while True:
+            d1=pickle.load(f1)
+            if d1['Eno']==eno:
+                f=1
+                break
+        f1.close()    
+    except:
+        pass        
+    if f==0:
+        print('Record Not Found')
+    else:
+        print('Record Found')
+def delete():
+    f1=open('student.dat','rb')
+    f2=open('ss.dat','wb')
+    eno=int(input('Enter Roll Number Which you Want To Remove'))
+    f=0
+    try:
+        while True:
+            d1=pickle.load(f1)
+            if d1['Eno']==eno:
+                f=1
+                continue
+            else:
+                pickle.dump(d1,f2)
+    except:
+        pass
+    if f==0:
+        print('Record Not Found')
+    else:
+        print('Record Delete')
+        f1.close()
+        f2.close()
+        os.remove('student.dat')
+        os.rename('ss.dat','student.dat')
+def modify():
+    f1=open('student.dat','r+b')
+    eno=int(input('Enter Roll Number In Which You Want To Modify'))
+    f=0
+    try:
+        while True:
+            cur=f1.tell()
+            d1=pickle.load(f1)
+            if d1['Eno']==eno:
+                crs=input('Enter new Course')
+                d1['Course']=crs
+                f1.seek(cur,0)
+                pickle.dump(d1,f1)
+                f=1
+                break
+    except:
+        pass
+    if f==0:
+        print('Record Not Found')
+    else:
+        print('Record Modify')
+        f1.close()
+while True:
+    print('Main Menu')
+    print('1. Add Record')
+    print('2. Display All')
+    print('3. Search Record')
+    print('4. Delete Record')
+    print('5. Modify Record')
+    print('6. Exit')
+    A=int(input('Enter Your Choice'))
+    if A==1:
+        addrec()
+    elif A==2:
+        displayall()
+    elif A==3:
+        Search()
+    elif A==4:
+        delete()
+    elif A==5:
+        modify()
+    else:
+        break
