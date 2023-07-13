@@ -1,0 +1,199 @@
+import random
+import sys
+import pickle
+import os
+def genAno():
+    a=random.randint(1,9)
+    b=random.randint(1,9)
+    c=random.randint(1,9)
+    d=random.randint(1,9)
+    num="sbi"+str(a)+str(b)+str(c)+str(d)
+    return num
+def openAccount():
+    f1=open('bank2.dat','ab')
+    ano=genAno()
+    print('Account Nuber is',ano)
+    cname=input('Enter Your Name')
+    atype=input('Enter Account Type')
+    if atype=='current':
+        money=3000
+    else:
+        money=2500    
+    d1={'ano':ano,'cname':cname,'atype':atype,'money':money}
+    pickle.dump(d1,f1)
+    f1.close()
+    print('Your Account Is Open')
+def DepMoney():
+    f1=open('bank2.dat','r+b')
+    ano=input('Enter Account Number')
+    f=0
+    try:
+        while True:
+            cur=f1.tell()
+            d1=pickle.load(f1)
+            if d1['ano']==ano:
+                amt=int(input('Enter amount to be deposited'))
+                d1['money']=d1['money']+amt
+                f1.seek(cur,0)
+                pickle.dump(d1,f1)
+                f=1
+                break
+    except:
+        pass
+    if f==0:
+        print('Account Not Found')
+    else:
+        print('Amount deposited')
+        f1.close()
+def WithMoney():
+    f1=open('bank2.dat','r+b')
+    ano=input('Enter Account Number')
+    f=0
+    try:
+        while True:
+            cur=f1.tell()
+            d1=pickle.load(f1)
+            if d1['ano']==ano:
+                amt=int(input('Enter amount to be withdrow'))
+                d1['money']=d1['money']-amt
+                f1.seek(cur,0)
+                pickle.dump(d1,f1)
+                f=1
+                break
+    except:
+        pass
+    if f==0:
+        print('Account Not Found')
+    else:
+        print('Amount Withdraw')
+        f1.close()
+def display():
+    f1=open('bank2.dat','rb')
+    try:
+        while True:
+            d1=pickle.load(f1)
+            print('Account Number Is',d1['ano'])
+            print('Name is ',d1['cname'])
+            print('Account Type is',d1['atype'])
+            print('Current Balance is',d1['money'])
+            print('='*30)
+        f1.close()    
+    except:
+        pass
+def EnqAccount():
+    f1=open('bank2.dat','rb')
+    ano=input('Enter Account Number')
+    f=0
+    try:
+        while True:
+            d1=pickle.load(f1)
+            if d1['ano']==ano:
+                f=1
+                break
+    except:
+        pass
+    if f==0:
+        print('Account Not Found')
+    else:
+        print('Account Number Is',d1['ano'])
+        print('Name is ',d1['cname'])
+        print('Account Type is',d1['atype'])
+        print('Current Balance is',d1['money'])
+        print('='*30)
+        f1.close()
+def getAcno(ano):
+    f1=open('bank2.dat','rb')
+    f=0
+    try:
+        while True:
+            d1=pickle.load(f1)
+            if d1['ano']==ano:
+                f=1
+                break
+        return f
+    except:
+        pass
+def TranMoney():
+    f1=open('bank2.dat','r+b')
+    ano=input('Enter Account Number')
+    ano1=input('Enter Account Number Which You Tranfer The Money')
+    F1=getAcno(ano)
+    F2=getAcno(ano1)
+    if F1==1 and F2==1:
+        try:
+            while True:
+                cur=f1.tell()
+                d1=pickle.load(f1)
+                if d1['ano']==ano:
+                    amt=int(input('Enter amount to be tranfer'))
+                    d1['money']=d1['money']-amt
+                    f1.seek(cur,0)
+                    pickle.dump(d1,f1)
+                    f1.close()
+        except:
+            pass   
+        f2=open('bank2.dat','r+b')
+        try:
+            while True:
+                cur=f2.tell()
+                d1=pickle.load(f2)
+                if d1['ano']==ano1:
+                    d1['money']=d1['money']+amt
+                    f2.seek(cur,0)
+                    pickle.dump(d1,f2)
+                    print('Money Transfered')
+                    f2.close()
+        except:
+            pass
+    else:
+        print('Account Not Found')
+def close():
+    f1=open('bank2.dat','rb')
+    f2=open('t1.dat','wb')
+    ano=input('Enter Account Number')
+    f=0
+    try:
+        while True:
+            d1=pickle.load(f1)
+            if d1['ano']==ano:
+                f=1
+                continue
+            else:
+                pickle.dump(d1,f2)
+    except:
+        pass
+    if f==0:
+        print('Account Not Found')
+    else:
+        f1.close()
+        f2.close()
+        os.remove('bank2.dat')
+        os.rename('t1.dat','bank2.dat')
+        print('Account Deleted')
+while True:
+    print('Main Menu')
+    print('1. Open Account')
+    print('2. Deposit Money')
+    print('3. Withdrow Money')
+    print('4. Enquiry Account')
+    print('5. Close Account')
+    print('6. Display All')
+    print('7. Transfer Money')
+    print('8. Exit')
+    A=int(input('Enter Your Choice'))
+    if A==1:
+        openAccount()
+    elif A==2:
+        DepMoney()
+    elif A==3:
+        WithMoney()
+    elif A==4:
+        EnqAccount()
+    elif A==5:
+        close()
+    elif A==6:
+        display()
+    elif A==7:
+        TranMoney()
+    else:
+        sys.exit(0)
