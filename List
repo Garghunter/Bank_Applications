@@ -1,0 +1,127 @@
+import sys
+import random
+customer=[]
+def genAno():
+    a=random.randint(1,9)
+    b=random.randint(1,9)
+    c=random.randint(1,9)
+    d=random.randint(1,9)
+    num="sbi"+str(a)+str(b)+str(c)+str(d)
+    return num
+def openAccount():
+    ano=genAno()
+    cname=input('Enter Your Name')
+    atype=input('Enter Account Type')
+    if atype=='current':
+        money=3000
+    else:
+        money=2500
+    customer.append([ano,cname,atype,money])
+    print('Your Account is open')
+    print('Your Account Number is {}'.format(ano))
+def DepMoney():
+    ano=input('Enter Account Number')
+    amt=int(input('Enter amount to be deposited'))
+    f=0
+    for x in customer:
+        if x[0]==ano:
+            f=1
+            x[3]=x[3]+amt
+            print('Amount deposited')
+            break
+    if f==0:
+        print('Account no not found')
+def WithMoney():
+    ano=input('Enter Account Number')
+    amt=int(input('Enter amount to be withdrow'))
+    f=0
+    for x in customer:
+        if x[0]==ano:
+            f=1
+            x[3]=x[3]-amt
+            print('Amount withdrow')
+            break
+    if f==0:
+        print('Account no not found')
+def EnqAccount():
+    ano=input('Enter Account Number')
+    f=0
+    for x in customer:
+        if x[0]==ano:
+            f=1
+            print('Account Number Is',x[0])
+            print('Name is ',x[1])
+            print('Account Type is',x[2])
+            print('Current Balance is',x[3])
+            break
+    if f==0:
+        print('Account no not found')
+def getAcno(ano):
+    f=0
+    for x in customer:
+        if x[0]==ano:
+            f=1
+            break
+    return f    
+def TranMoney():
+    ano=input('Enter Account Number')
+    amt=int(input('Enter amount to be tranfer'))
+    ano1=input('Enter Account Number Which You Tranfer The Money')
+    f=0
+    f1=getAcno(ano)
+    f2=getAcno(ano1)
+    if f1==1 and f2==1:
+        for i in customer:
+            if i[0]==ano:
+                i[3]=i[3]-amt
+                f=1
+                break
+        for j in customer:
+            if j[0]==ano1:
+                j[3]=j[3]+amt
+                f=1
+                print('Money Transfered')
+                break
+    else:
+        print('Account is NOt found')
+def display():
+    for y in customer:
+        print('Account Number Is',y[0])
+        print('Name is ',y[1])
+        print('Account Type is',y[2])
+        print('Current Balance is',y[3])
+        print('='*30)
+def delete():
+    ano=input('Enter Account Number')
+    for x in customer:
+        if x[0]==ano:
+            x.clear()
+            print('Your Account is Closed')
+while True:
+    print('Main Menu')
+    print('1. Open Account')
+    print('2. Deposit Money')
+    print('3. Withdrow Money')
+    print('4. Enquiry Account')
+    print('5. Close Account')
+    print('6. Display All')
+    print('7. Transfer Money')
+    print('8. Exit')
+    A=int(input('Enter Your Choice'))
+    if A==1:
+        openAccount()
+    elif A==2:
+        DepMoney()
+    elif A==3:
+        WithMoney()
+    elif A==4:
+        EnqAccount()
+    elif A==5:
+        delete()
+    elif A==6:
+        display()
+    elif A==7:
+        TranMoney()
+    else:
+        sys.exit(0)
+            
