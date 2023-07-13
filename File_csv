@@ -1,0 +1,56 @@
+import csv
+def addre():
+    f1=open('Harshit.csv','w',newline='')
+    aa=csv.writer(f1)
+    aa.writerow(['Eno','Student Name','Course','Fee'])
+    while True:
+        eno=input('Enter Roll Number')
+        sname=input('Enter Student Name')
+        crs=input('Enter Course')
+        fee=input('Enter Fee')
+        aa.writerow([eno,sname,crs,fee])
+        a=int(input('Enter 1 for Exit'))
+        if a==1:
+            break
+    f1.close()
+def display():
+    f1=open('Harshit.csv','r')
+    aa=csv.reader(f1)
+    for i in aa:
+        if aa.line_num==1:
+            continue
+        print('Eno is ',i[0])
+        print('Student Name is ',i[1])
+        print('Coutse is',i[2])
+        print('Fee is',i[3])
+        print('='*50)
+    f1.close()
+def search():
+    f1=open('Harshit.csv','r')
+    aa=csv.reader(f1)
+    f=0
+    eno=input('Enter Roll Number')
+    for i in aa:
+        if i[0]==eno:
+            f=1
+            break
+    if f==0:
+        print('Record Not Found')
+    else:
+        print('Record found')
+while True:
+    print('Main Menu')
+    print('1. Add Record')
+    print('2. Display All')
+    print('3. Search Record')
+    print('4. Exit')
+    A=int(input('Enter your Choice'))
+    if A==1:
+        addre()
+    elif A==2:
+        display()
+    elif A==3:
+        search()
+    else:
+        break
+    
