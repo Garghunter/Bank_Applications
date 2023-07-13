@@ -1,0 +1,171 @@
+import random
+import mysql.connector
+import sys
+def acccheck(Ano):
+    con = mysql.connector.connect(host='localhost', database='bank', user='root', password='')
+    if con.is_connected():
+        qry = "select Ano from sbi where Ano='{}'".format(Ano)
+        c1 = con.cursor()
+        c1.execute(qry)
+        rows = c1.fetchall()
+        if c1.rowcount>0:
+            x=True
+        else:
+            x=False
+        return x
+def genAno():
+    a=random.randint(1,9)
+    b=random.randint(1,9)
+    c=random.randint(1,9)
+    d=random.randint(1,9)
+    num="sbi"+str(a)+str(b)+str(c)+str(d)
+    return num
+def Addrec():
+    con=mysql.connector.connect(host='localhost',database='bank',user='root',password='')
+    if con.is_connected():
+        Ano=genAno()
+        Name1=input('Enter Your name')
+        Atype=input('Enter Account Type')
+        if Atype=='current':
+            Money=3000
+        else:
+            Money=2500
+        qry="insert into sbi values('{}','{}','{}',{})".format(Ano,Name1,Atype,Money)
+        c1=con.cursor()
+        c1.execute(qry)
+        con.commit()
+        con.close
+        print('Account Is Open')
+    else:
+        print('not connected')
+def Withmon():
+    con = mysql.connector.connect(host='localhost', database='bank', user='root', password='')
+    if con.is_connected():
+        Ano =input('Enter Account Number')
+        if acccheck(Ano):
+            Money=int(input('Enter Money'))
+            qry = "update sbi set Money=Money+{} where Ano='{}'".format(Money,Ano)
+            c1 = con.cursor()
+            c1.execute(qry)
+            con.commit()
+            con.close
+            print('Money Withdrow')
+        else:
+            print('Account Not Found')
+    else:
+        print('not connected')
+def Depositmon():
+    con = mysql.connector.connect(host='localhost', database='bank', user='root', password='')
+    if con.is_connected():
+        Ano = input('Enter Account Number')
+        if acccheck(Ano):
+            Money = int(input('Enter Money'))
+            qry = "update sbi set Money=Money-{} where Ano='{}'".format(Money, Ano)
+            c1 = con.cursor()
+            c1.execute(qry)
+            con.commit()
+            con.close
+            print('Money Added')
+        else:
+            print('Account Not Found')
+    else:
+        print('not connected')
+def Displayall():
+    con = mysql.connector.connect(host='localhost', database='bank', user='root', password='')
+    if con.is_connected():
+        qry = "select * from sbi"
+        c1 = con.cursor()
+        c1.execute(qry)
+        rows = c1.fetchall()
+        for x in rows:
+            print('Account Nunber is ', x[0])
+            print('Name is ', x[1])
+            print('Account Type is ', x[2])
+            print('Money is', x[3])
+            print('=' * 30)
+        c1.close
+    else:
+        print('not connected')
+def EnqAccount():
+    con = mysql.connector.connect(host='localhost', database='bank', user='root', password='')
+    if con.is_connected():
+        Ano=input('Enter Account Number')
+        if acccheck(Ano):
+            qry = "select * from sbi where Ano='{}'".format(Ano)
+            c1 = con.cursor()
+            c1.execute(qry)
+            rows = c1.fetchall()
+            for x in rows:
+                print('Account Nunber is ', x[0])
+                print('Name is ', x[1])
+                print('Account Type is ', x[2])
+                print('Money is', x[3])
+                print('=' * 30)
+            c1.close
+        else:
+            print('Account Not Found')
+    else:
+        print('not connected')
+def Deletac():
+    con = mysql.connector.connect(host='localhost', database='bank', user='root', password='')
+    if con.is_connected():
+        Ano = input('Enter Account Number')
+        if acccheck(Ano):
+            qry="delete from sbi where Ano='{}'".format(Ano)
+            c1 = con.cursor()
+            c1.execute(qry)
+            con.commit()
+            con.close
+            print('Account Deleted')
+        else:
+            print('Account Not Found')
+    else:
+        print('Not Connected')
+
+def transmo():
+    con = mysql.connector.connect(host='localhost', database='bank', user='root', password='')
+    if con.is_connected():
+        Ano = input('Enter Account Number')
+        Ano1= input('Enter Account Number in which You transfer Money')
+        if acccheck(Ano):
+            if acccheck(Ano1):
+                Money = int(input('Enter Money'))
+                qry1 = "update sbi set Money=Money-{} where Ano='{}'".format(Money, Ano)
+                qry2 = "update sbi set Money=Money+{} where Ano='{}'".format(Money, Ano1)
+                c1 = con.cursor()
+                c1.execute(qry1)
+                c1.execute(qry2)
+                con.commit()
+                con.close
+                print('Money Transfer')
+            else:
+                print('Receiver Account Not found')
+        else:
+            print('Sender Account Not Found')
+while True:
+    print('Main Menu')
+    print('1. Open Account')
+    print('2. Deposit Money')
+    print('3. Withdraw Money')
+    print('4. Enquiry Account')
+    print('5. Close Account')
+    print('6. Display All')
+    print('7. Transfer Money')
+    print('8. Exit')
+    A = int(input('Enter Your Choice'))
+    if A == 1:
+        Addrec()
+    elif A == 2:
+        Depositmon()
+    elif A == 3:
+        Withmon()
+    elif A == 4:
+        EnqAccount()
+    elif A == 5:
+        Deletac()
+    elif A == 6:
+        Displayall()
+    elif A == 7:
+        transmo()
+    else:
+        sys.exit(0)
